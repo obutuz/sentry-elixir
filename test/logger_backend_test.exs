@@ -46,7 +46,7 @@ defmodule Sentry.LoggerBackendTest do
 
     Bypass.expect(bypass, fn conn ->
       {:ok, body, conn} = Plug.Conn.read_body(conn)
-      json = Poison.decode!(body)
+      json = Jason.decode!(body)
 
       assert List.first(json["exception"])["value"] ==
                ~s[Erlang error: {:bad_return_value, "I am throwing"}]
@@ -74,7 +74,7 @@ defmodule Sentry.LoggerBackendTest do
 
     Bypass.expect(bypass, fn conn ->
       {:ok, body, conn} = Plug.Conn.read_body(conn)
-      json = Poison.decode!(body)
+      json = Jason.decode!(body)
       assert List.first(json["exception"])["type"] == "Elixir.ErlangError"
       assert List.first(json["exception"])["value"] == "Erlang error: :bad_exit"
       assert conn.request_path == "/api/1/store/"
@@ -100,7 +100,7 @@ defmodule Sentry.LoggerBackendTest do
 
     Bypass.expect(bypass, fn conn ->
       {:ok, body, conn} = Plug.Conn.read_body(conn)
-      json = Poison.decode!(body)
+      json = Jason.decode!(body)
 
       assert %{
                "in_app" => false,
@@ -133,7 +133,7 @@ defmodule Sentry.LoggerBackendTest do
 
     Bypass.expect(bypass, fn conn ->
       {:ok, body, conn} = Plug.Conn.read_body(conn)
-      json = Poison.decode!(body)
+      json = Jason.decode!(body)
       assert length(json["stacktrace"]["frames"]) == 1
       assert List.first(json["stacktrace"]["frames"])["filename"] == "test/support/test_plug.ex"
       send(pid, "API called")
