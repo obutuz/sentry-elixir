@@ -15,7 +15,7 @@ Otherwise we provide a simple way to capture exceptions:
       ThisWillError.reall()
     rescue
       my_exception ->
-        Sentry.capture_exception(my_exception, [stacktrace: System.stacktrace(), extra: %{extra: information}])
+        Sentry.capture_exception(my_exception, [stacktrace: __STACKTRACE__, extra: %{extra: information}])
     end
 
 
